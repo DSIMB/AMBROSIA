@@ -14,9 +14,9 @@ parser = argparse.ArgumentParser(
                     prog = 'AMBROSIA',
                     description = 'Prediction of carbohydrate binding residues on protein using pre-trained pLM embeddings.')
 
-parser.add_argument('embeddings_path', type=str, help="""h5py file containing an entry for each chain (key) with the corresponding per-residue embedding (value)""", nargs='?', default='examples/examples.h5')
-parser.add_argument('parameters_path', type=str, help="""Model parameters path in PyTorch state dictionnary format""", nargs='?', default='model/esm2_t33_lr5e-7_bs4096.pth')
-parser.add_argument('output_path', type=str, help="""Output path in csv format""", nargs='?', default="results/results.csv")
+parser.add_argument('embeddings_path', type=str, help="""h5py file containing an entry for each chain (key) with the corresponding per-residue embedding (value)""")
+parser.add_argument('parameters_path', type=str, help="""Model parameters path in PyTorch state dictionnary format""")
+parser.add_argument('output_path', type=str, help="""Output path in csv format""")
 parser.add_argument('-window_size', type=int, default=13, help='Sliding window size used in the model. This should be an odd integer.')
 parser.add_argument('-hidden_layers', type=int, nargs='+', default=[128],
 help='Number of out channels used during successive convolution layers. If a single number is specified, it is applied to all layers.')
@@ -98,6 +98,7 @@ def predict_carbohydrate_binding_sites(parameters_path, embeddings_path,
                 results_dic['Prediction'] += labels.tolist()
                 probabilities = softmax(out, dim=1, dtype=torch.float).cpu().numpy()
                 results_dic['Probability'] += probabilities.max(1).tolist()
+    results_dic['Probability'] = results_dic['Probability'].astype(bool)
     return pd.DataFrame(results_dic)
 
 
@@ -110,7 +111,7 @@ if __name__ == '__main__':
     results = predict_carbohydrate_binding_sites(args.parameters_path, args.embeddings_path,
     window_size=args.window_size, hidden_layers=args.hidden_layers, 
     hidden_layers_fc=args.hidden_layers_fc, kernel_size=args.kernel_size)
-    results.to_csv(args.output_path)
+    results.to_csv(args.output_path, index=False)
 
 
     
