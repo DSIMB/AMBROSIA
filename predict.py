@@ -11,21 +11,21 @@ from tqdm import tqdm
 
 
 parser = argparse.ArgumentParser(
-                    prog = 'Sequential SugarPred training',
-                    description = 'Prediction of carbohydrate binding site using only sequential information.')
+                    prog = 'AMBROSIA',
+                    description = 'Prediction of carbohydrate binding residues on protein using pre-trained pLM embeddings.')
 
-parser.add_argument('parameters_path', type=str, help="""Parameters path""")
-parser.add_argument('embeddings_path', type=str, help="""Embeddings path""")
-parser.add_argument('output_path', type=str, help="""Output path (csv format)""")
-parser.add_argument('-window_size', type=int, default=13, help='Sliding window size (should be an odd integer)')
+parser.add_argument('embeddings_path', type=str, help="""h5py file containing an entry for each chain (key) with the corresponding per-residue embedding (value)""", nargs='?', default='examples/examples.h5')
+parser.add_argument('parameters_path', type=str, help="""Model parameters path in PyTorch state dictionnary format""", nargs='?', default='model/esm2_t33_lr5e-7_bs4096.pth')
+parser.add_argument('output_path', type=str, help="""Output path in csv format""", nargs='?', default="results/results.csv")
+parser.add_argument('-window_size', type=int, default=13, help='Sliding window size used in the model. This should be an odd integer.')
 parser.add_argument('-hidden_layers', type=int, nargs='+', default=[128],
-help='Number of hidden layers used during successive convolution layers. If only one number is specified, it is applied to all layers')
+help='Number of out channels used during successive convolution layers. If a single number is specified, it is applied to all layers.')
 parser.add_argument('--hidden_layers_fc', type=int, default=128,
-help='Number of hidden layers used in between the two fully connected layers.')
+help='Number of out channels of the first fully connected layer.')
 parser.add_argument('-kernel_size', type=int, nargs='+', default=[3],
-help='Kernel size of the successive convolution layers. If only one number is specified, it is applied to all layers')
+help='Kernel size of the successive convolution layers. If a single number is specified, it is applied to all layers.')
 parser.add_argument('--device', type=str, default='auto', 
-help="Device used for computation can be one of 'cpu', 'cuda' and 'auto'. 'auto' automatically select GPU if it exists or CPU otherwise")
+help="Device used for computation can be one of 'cpu', 'cuda' and 'auto'. 'auto' automatically select GPU if it exists or CPU otherwise.")
 
 args = parser.parse_args()
 
