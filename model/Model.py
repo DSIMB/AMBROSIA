@@ -6,7 +6,7 @@ from torch.nn import Linear, ReLU, Conv1d, MultiheadAttention, BatchNorm1d
 class SweetConv(torch.nn.Module):
     def __init__(self, in_channels=320, out_channels=2, hidden_layers=[128], 
                  dropout=0.5, dropout_conv=0.1, window_size=13, kernel_size=[3],
-                 hidden_layers_fc=1024):
+                 hidden_layers_fc=128):
         super().__init__()
         if len(hidden_layers) < 3:
             h1, h2, h3 = [hidden_layers[0]]*3
