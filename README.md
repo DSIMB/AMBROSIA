@@ -1,4 +1,6 @@
 # AMBROSIA
+AMBROSIA performs prediction of carbohydrate binding residues from a given protein sequence. It encodes protein sequence using embedding derived from the pre-trained protein language model ESM-2 and convolutional neural network to provide predictions in two classes: 1 - residue participates in carbohydrate binding site formation and 0 - it does not. We consider a residue to form carbohydrate binding site if at least one of its heavy atoms is located closer than 7 A to any atom of the carbohydrate ring.
+
 ## Installation
 ### Prerequisites
 - numpy
