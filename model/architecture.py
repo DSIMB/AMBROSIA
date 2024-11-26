@@ -1,3 +1,7 @@
+import torch
+import torch.nn as nn
+import torch.nn.functional as F
+
 activation_string_to_function = {
     'relu': F.relu,
     'tanh': F.tanh,
